@@ -33,6 +33,5 @@ urlpatterns = [
 
     path('usuario/create', views.UsuarioCreate.as_view(), name='usuarioCreate'),
 
-
     
 ]

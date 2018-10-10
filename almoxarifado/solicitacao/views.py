@@ -20,7 +20,6 @@ from almoxarifado.users.models import User
 from almoxarifado.users.forms import UserCreationForm
 
 
-
 class PaginaInicialSistema(LoginRequiredMixin, TemplateView):
     model = User
     template_name = "solicitacao/pagina_inicial.html"
