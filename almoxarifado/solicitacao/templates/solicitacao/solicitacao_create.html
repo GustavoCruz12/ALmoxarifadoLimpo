@@ -1,0 +1,165 @@
+{% extends "baseSol.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block sidebar %}
+<div class="sidebar">
+    <!-- Sidebar user (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img src="{% static 'dist/img/avatar04.png'%}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+            {% if user.is_authenticated %}
+            <a href="{#}" class="d-block">{{user.username}}</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="tree" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+             with font-awesome or any other icon font library -->
+        </ul>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/nova.jpg'%}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+
+                <a href="{% url 'novaSolicitacao' %}" class="d-block">Nova Requisição</a>
+
+            </div>
+        </div>
+
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/lista1.jpg'%}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+
+                <a href="{% url 'listaSolicitacao' %}" class="d-block">Minhas Requisições</a>
+
+            </div>
+        </div>
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+{% endblock sidebar %}
+
+{% block content %}
+    <section class="content">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.media}}
+            {% for hidden_field in form.hidden_fields  %}
+            {{hidden_field}}
+            {% endfor %}
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Movimentação</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col-md-8">
+                        <label>Movimentação</label>
+                        <div class="input-group date">
+                            {% render_field form.movimentacao_relacionamento class="form-control" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Itens</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table ">
+                        {{ materiais.management_form }}
+
+                        {% for form in materiais.forms %}
+                        {% if forloop.first %}
+                        <thead>
+                            <tr>
+                                <th class="col">
+                                    <span>Material</span>
+                                </th>
+                                <th class="col">
+                                    <span>Unidade</span>
+                                </th>
+                                <th class="col">
+                                    <span>Quantidade</span>
+                                </th>                            
+                                <th class="col">
+                                    <span>Apagar</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        {% endif %}
+                        {% endfor %}
+                        {% for form in materiais.forms %}
+                        <tr class="formset_row">
+                            <!-- form qtde -->
+                            <td class="col">
+                                {% if forloop.first %}
+                                {% for hidden in form.hidden_fields %}
+                                {{hidden}}
+                                {% endfor %}
+                                {% endif %}
+                                {% render_field form.relacionamento_materiais class="form-control" %}
+                            </td>
+                            <!-- form unidade -->
+                            <td class="col">
+                                {% render_field form.unidade_relacionamento class="form-control" %}
+                            </td>
+                            <td class="col">
+                                {% render_field form.quantidade_material class="form-control" %}
+                            </td>                                        
+                            <td class="col">
+                                <!-- APAGAR FORMSET  -->
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+                <div class="card-footer">
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Confirmação</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-primary glyphicon glyphicon-ok"> Enviar </button>
+
+                    <a href="{% url 'home' %}" class="btn btn-danger glyphicon-ok glyphicon glyphicon-remove"> Cancelar</a>
+                </div>
+                <div class="card-footer">
+
+                </div>
+            </div>
+
+        </form>
+    </section>
+{% endblock content %}

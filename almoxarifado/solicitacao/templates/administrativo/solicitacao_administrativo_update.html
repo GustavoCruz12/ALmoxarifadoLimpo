@@ -1,0 +1,248 @@
+{% extends "baseSol.html" %}
+{% load static %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Almoxarifado</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{% url 'home'%}">Pagina Inicial</a></li>
+                    <li class="breadcrumb-item">Administrativo</li>
+                    <li class="breadcrumb-item">Detalhes</li>
+                    <li class="breadcrumb-item active">Administrar</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+{% endblock breadcrumb %}
+
+{% block sidebar %}
+
+<div class="sidebar">
+    <!-- Sidebar user (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img src="{% static 'dist/img/avatar04.png'%}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+            {% if user.is_authenticated %}
+            <a href="{#}" class="d-block">{{user.username}}</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+             with font-awesome or any other icon font library -->
+        </ul>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/nova.jpg'%}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="{% url 'novaSolicitacao' %}" class="d-block">Nova Requisição</a>
+            </div>
+        </div>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/lista1.jpg'%}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="{% url 'listaAdministrativo' %}" class="d-block">Requisições</a>
+            </div>
+        </div>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/logo.png'%}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="{% url 'materiaiscreate' %}" class="d-block">Adicionar Materiais</a>
+            </div>
+        </div>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/listamaterial.png'%}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="{% url 'materiaislist' %}" class="d-block">Lista de Materiais</a>
+            </div>
+        </div>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{% static 'dist/img/user.png'%}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="{% url 'usuarioCreate' %}" class="d-block">Adicionar Usuário</a>
+                </div>
+            </div>
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+
+{% endblock sidebar %}
+
+{% block content %}
+<section class="content">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %} 
+        {{form.media}} 
+        {% for hidden_field in form.hidden_fields %} 
+        {{hidden_field}} 
+        {% endfor %}
+        <!-- Default box -->
+        <fieldset hidden=True>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Movimentação</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col-md-8">
+                        <label>Almoxarifado</label>
+                        <div class="input-group date">
+                            {% render_field form.almoxarifado_relacionamento class="form-control" %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label>Movimentação</label>
+                        <div class="input-group date">
+                            {% render_field form.movimentacao_relacionamento class="form-control" %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label>Departamento</label>
+                        <div class="input-group date">
+                            {% render_field form.departamento_relacionamento class="form-control" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </fieldset>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Itens</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <table class="table table-striped col-sm-2">
+                        {{ materiais.management_form }}
+                        <thead>
+                            <tr>
+                                <th>Quantidade Aprovada</th>                                        
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for form in materiais.forms %}
+                            {% for field in form.visible_fields %}
+                            <tr class="">
+                                <td>
+                                    {# Include the hidden fields in the form #} 
+                                    {% if forloop.first %} 
+                                    {% for hidden in form.hidden_fields %} 
+                                    {{ hidden }} 
+                                    {%endfor %} 
+                                    {% endif %} 
+                                    {{ field.errors.as_ul }} 
+                                    {{form.quantidade_aprovada}}
+                                </td>
+                            </tr>
+                            {% endfor %} 
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <table class="table table-striped col" id="p01">
+                            <thead>
+                                <tr>
+                                    <th>Quantidade de Materiais</th>
+                                    <th>Código Material</th>
+                                    <th>Material</th>
+                                    <th>Unidade</th>                                     
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for material in materiaisList  %}
+                                <tr>
+                                    <td>
+                                        {{material.quantidade_material}}
+                                    </td>
+                                    <td>
+                                        {{material.relacionamento_materiais.codigo_material}}
+                                    </td>
+                                    <td>
+                                        {{material.relacionamento_materiais|truncatechars:20}}
+                                    </td>
+                                    <td>
+                                        {{material.unidade_relacionamento}}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Aprovação</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <label>Aprovar Solicitação</label>
+                {% render_field form.requisicao_processamento%}
+                <fieldset hidden=True>
+                    {% render_field form.requisicao_secretario %}
+                </fieldset>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Confirmação</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if solicitacao.requisicao_processamento == True %}
+                
+                {% else %}
+                <button type="submit" class="btn btn-primary glyphicon glyphicon-ok"> Confirmar </button>
+                {% endif %}
+                <a href="{% url 'listaAdministrativo' %}" class="btn btn-danger glyphicon-ok glyphicon glyphicon-remove"> Cancelar</a>
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock content %}
+

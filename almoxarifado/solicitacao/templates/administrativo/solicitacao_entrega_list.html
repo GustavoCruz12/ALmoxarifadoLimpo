@@ -1,0 +1,173 @@
+{% extends "baseSol.html" %}
+{% load static %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block breadcrumb %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Almoxarifado</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{% url 'home'%}">Pagina Inicial</a></li>
+                    <li class="breadcrumb-item">Entrega</li>
+                    <li class="breadcrumb-item active">Lista</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+{% endblock breadcrumb %}
+
+{% block sidebar %}
+
+<div class="sidebar">
+    <!-- Sidebar user (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img src="{% static 'dist/img/avatar04.png'%}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+            {% if user.is_authenticated %}
+            <a href="{#}" class="d-block">{{user.username}}</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+             with font-awesome or any other icon font library -->
+        </ul>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/nova.jpg'%}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="{% url 'novaSolicitacao' %}" class="d-block">Nova Requisição</a>
+            </div>
+        </div>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/lista1.jpg'%}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="{% url 'entregaLista' %}" class="d-block">Requisições</a>
+            </div>
+        </div>
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+
+{% endblock sidebar %}
+
+{% block content %}
+<section class="content">
+    <!-- Default box -->
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Requisições</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#home">Requisições em Separação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#menu1">Requisições em Trânsito</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#menu2">Requisições Finalizadas</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane container active" id="home">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>ID Requisição</th>
+                                <th>Usuário</th>
+                                <th>Departamento</th>
+                                <th>Data da Requisição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for solicitacoesS in solicitacoesS %}
+                            <tr>
+                                <th>
+                                    <a href="{% url 'entregaDetalhe' pk=solicitacoesS.pk %}">{{solicitacoesS.numero_descricao}}</a>
+                                </th>
+                                <td>{{solicitacoesS.user}}</td>
+                                <td>{{solicitacoesS.departamento_relacionamento}}</td>
+                                <td>{{solicitacoesS.data_emissao}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane container fade" id="menu1">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>ID Requisição</th>
+                                <th>Usuário</th>
+                                <th>Departamento</th>
+                                <th>Data da Requisição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for solicitacoesE in solicitacoesE %}
+                            <tr>
+                                <th>
+                                    <a href="{% url 'entregaDetalhe' pk=solicitacoesE.pk %}">{{solicitacoesE.numero_descricao}}</a>
+                                </th>
+                                <td>{{solicitacoesE.user}}</td>
+                                <td>{{solicitacoesE.departamento_relacionamento}}</td>
+                                <td>{{solicitacoesE.data_emissao}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane container fade" id="menu2">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>ID Requisição</th>
+                                <th>Usuário</th>
+                                <th>Departamento</th>
+                                <th>Data da Requisição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for solicitacoesF in solicitacoesF %}
+                            <tr>
+                                <th>
+                                    <a href="{% url 'entregaDetalhe' pk=solicitacoesF.pk %}">{{solicitacoesF.numero_descricao}}</a>
+                                </th>
+                                <td>{{solicitacoesF.user}}</td>
+                                <td>{{solicitacoesF.departamento_relacionamento}}</td>
+                                <td>{{solicitacoesF.data_emissao}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

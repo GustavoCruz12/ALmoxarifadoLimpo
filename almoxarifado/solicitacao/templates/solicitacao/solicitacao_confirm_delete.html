@@ -1,0 +1,30 @@
+{% extends "baseSol.html" %}
+{% load static %} 
+{% load staticfiles %} 
+{% load widget_tweaks %}
+{% block content %}
+<section class="content">
+    <!-- Default box -->
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Confirme sua ação</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="post">{% csrf_token %}
+                <p>Tem Certeza que deseja apagar a sua requisição?</p>
+                <button type="submit" class="btn btn-danger">Sim</button>
+                <a class="btn btn-primary" href="{% url 'detalheSolicitacao' solicitacao.id %}">Voltar</a>
+            </form>
+        </div>
+
+
+    </div>
+    <div class="card-footer"></div>
+</section>
+{% endblock content %}
